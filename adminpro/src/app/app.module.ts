@@ -8,6 +8,9 @@ import {SharedModule} from "./shared/shared.module";
 
 import { AppComponent } from './app.component';
 import {NopagefoundComponent} from "./nopagefound/nopagefound.component";
+import {FormsModule} from "@angular/forms";
+
+
 
 
 
@@ -17,13 +20,16 @@ import {NopagefoundComponent} from "./nopagefound/nopagefound.component";
     NopagefoundComponent,
 
 
+
+
 ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     PagesModule,
     SharedModule,
-    AuthModule
+    AuthModule,
+    FormsModule
 
   ],
   providers: [],
