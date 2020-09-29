@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {MultiDataSet} from "ng2-charts";
 
 
 
@@ -11,7 +10,7 @@ import {MultiDataSet} from "ng2-charts";
 })
 export class Grafica1Component  {
 
- public labels:string[]= ['Pan', 'Tacos', 'Refresco'];
+ public labels1:string[]= ['Pan', 'Tacos', 'Refresco'];
 
   public data1 = [
     [10, 20, 40],
