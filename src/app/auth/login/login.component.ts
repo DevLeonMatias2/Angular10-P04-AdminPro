@@ -15,14 +15,14 @@ declare const gapi: any;
 export class LoginComponent implements OnInit {
 
   public formSubmitted = false;
+  private auth2: any;
 
   public loginForm = this.fb.group({
     email: [localStorage.getItem('email') || '', [Validators.required, Validators.email]],
     password: ['', Validators.required],
     remember: [false]
   });
-  private Swal: any;
-  private auth2: any;
+
 
 
   constructor(private router: Router,
@@ -49,7 +49,11 @@ export class LoginComponent implements OnInit {
       this.router.navigateByUrl('/');
 
     }, (err) => {
-      this.Swal.fire('Error', err.error.msg, 'error');
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err
+      })
     });
 
     // console.log(this.loginForm.value)
@@ -70,17 +74,11 @@ export class LoginComponent implements OnInit {
 
   }
 
-  startApp() {
-    gapi.load('auth2', function () {
-      // Retrieve the singleton for the GoogleAuth library and set up the client.
-      this.auth2 = gapi.auth2.init({
-        client_id: '222669521703-m8v8komjrtj64m5fdffn8a17ltcmvndp.apps.googleusercontent.com ',
-        cookiepolicy: 'single_host_origin',
-        // Request scopes in addition to 'profile' and 'email'
-        //scope: 'additional_scope'
-      });
+  async startApp() {
+      await this.usuarioService.googleInit();
+     this.auth2 = this.usuarioService.auth2;
       this.attachSignin(document.getElementById('my-signin2'));
-    });
+
   };
 
   attachSignin(element) {

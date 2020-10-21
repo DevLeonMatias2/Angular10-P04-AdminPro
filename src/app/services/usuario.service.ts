@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {RegisterForm} from "../interfaces/register-form.interface";
@@ -7,21 +7,53 @@ import {catchError, map, tap} from "rxjs/operators";
 // @ts-ignore
 import Any = jasmine.Any;
 import {Observable, of} from "rxjs";
-import {error} from "@angular/compiler/src/util";
+import {Router} from "@angular/router";
 
 
 const base_url = environment.base_url;
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
+  public auth2:any;
+  private gapi: any;
 
-  constructor(private http:HttpClient ) {}
 
+
+
+
+  constructor(private http:HttpClient,
+              private router:Router,
+              private ngZone:NgZone) {
+    this.googleInit();
+  }
+
+ googleInit(){
+
+    return new Promise( resolve => {
+   this.gapi.load('auth2',  ()=> {
+     let gapi;
+     this.auth2 = gapi.auth2.init({
+       client_id: '222669521703-m8v8komjrtj64m5fdffn8a17ltcmvndp.apps.googleusercontent.com ',
+       cookiepolicy: 'single_host_origin',
+    });
+      resolve();
+     });
+   });
+ }
 
   logout(){
     localStorage.removeItem('token');
+
+  this.auth2.signOut().then( ()=> {
+
+    this.ngZone.run(()=>{
+    this.router.navigateByUrl('/login');
+    })
+    });
+
   }
 
   validarToken(): Observable<boolean>{
